@@ -1,2 +1,3 @@
 [workspace]
-members = [""]
+members = ["boot/uefi_loader"]
+resolver = "3"
