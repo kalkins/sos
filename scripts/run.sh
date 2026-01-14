@@ -8,8 +8,9 @@ cd "$root_dir" || exit 1
 
 cargo build --target x86_64-unknown-uefi || exit 1
 
-cp "$root_dir/target/x86_64-unknown-uefi/debug/uefi_loader.efi" "$root_dir/tmp/esp/efi/boot/bootx64.efi" || exit 1
+mkdir -p "$root_dir/tmp/esp/efi/boot/" || exit 1
 
+cp "$root_dir/target/x86_64-unknown-uefi/debug/uefi_loader.efi" "$root_dir/tmp/esp/efi/boot/bootx64.efi" || exit 1
 
 qemu-system-x86_64 \
     -enable-kvm \
