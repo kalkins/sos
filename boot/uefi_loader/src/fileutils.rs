@@ -1,5 +1,5 @@
 use alloc::vec::Vec;
-use log::{debug, info};
+use log::info;
 use uefi::{
     fs::{FileSystem, Path},
     prelude::*,

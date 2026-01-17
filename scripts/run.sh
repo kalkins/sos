@@ -31,4 +31,5 @@ qemu-system-x86_64 \
     -drive if=pflash,format=raw,readonly=on,file=/usr/share/OVMF/x64/OVMF_CODE.4m.fd \
     -drive if=pflash,format=raw,readonly=on,file=/usr/share/OVMF/x64/OVMF_VARS.4m.fd \
     -drive format=raw,file=fat:rw:"$esp_partition_dir" \
-    -drive format=raw,file=fat:rw:"$root_partition_dir"
+    -drive format=raw,file=fat:rw:"$root_partition_dir" \
+    -serial stdio

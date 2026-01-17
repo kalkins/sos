@@ -3,30 +3,31 @@ ENTRY(_start)
 SECTIONS {
   . = 0x200000;
 
-  .text : {
+  .text : ALIGN(4096) {
     *(.text*)
   }
 
-  .rodata : {
+  .rodata : ALIGN(4096) {
     *(.rodata*)
   }
 
-  .data : {
+  .data : ALIGN(4096) {
     *(.data*)
   }
 
-  . = ALIGN(4096);
-
-  .bss : {
+  .bss : ALIGN(4096) {
     *(.bss*)
     *(COMMON)
   }
 
-  . = ALIGN(16);
-
-  .stack : {
+  .stack : ALIGN(4096) {
     _stack_bottom = .;
     . = . + 0x4000;
     _stack_top = .;
+  }
+
+  /DISCARD/ : {
+    *(.eh_frame)
+    *(.note .note.*)
   }
 }

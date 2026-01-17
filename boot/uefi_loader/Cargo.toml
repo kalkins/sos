@@ -5,4 +5,5 @@ edition = "2024"
 
 [dependencies]
 uefi = { version = "0.36.*", features = ["alloc", "global_allocator", "panic_handler", "logger"] }
+goblin = { version = "0.10", default-features=false, features = ["elf32", "elf64", "endian_fd"] }
 log = "0.4.*"
