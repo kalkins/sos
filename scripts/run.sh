@@ -1,23 +1,30 @@
 #!/usr/bin/env bash
 
-script_path="${BASH_SOURCE[0]}"
+script_path=$(realpath "${BASH_SOURCE[0]}")
 script_dir="$(dirname "$script_path")"
-root_dir="$script_dir/.."
+root_dir=$(dirname "$script_dir")
 partition_dir="$root_dir/tmp/partitions/"
 esp_partition_dir="$partition_dir/esp"
 root_partition_dir="$partition_dir/root"
 uefi_output_dir="$esp_partition_dir/efi/boot/"
 
-uefi_loader_output="$root_dir/target/x86_64-unknown-uefi/debug/uefi_loader.efi"
+bootloader_project="$root_dir/boot/uefi_loader"
+kernel_project="$root_dir/kernel"
 
-cd "$root_dir" || exit 1
+bootloader_output="$root_dir/target/x86_64-unknown-uefi/debug/uefi_loader.efi"
+kernel_output="$root_dir/target/x86_64-sos/debug/kernel"
 
-cargo build --target x86_64-unknown-uefi || exit 1
+cd "$bootloader_project" || exit 1
+cargo build || exit 1
+
+cd "$kernel_project" || exit 1
+cargo build || exit 1
 
 mkdir -p "$uefi_output_dir" || exit 1
 mkdir -p "$root_partition_dir" || exit 1
 
-cp "$uefi_loader_output" "$uefi_output_dir/bootx64.efi" || exit 1
+cp "$bootloader_output" "$uefi_output_dir/bootx64.efi" || exit 1
+cp "$kernel_output" "$root_partition_dir/boot/kernel" || exit 1
 
 qemu-system-x86_64 \
     -enable-kvm \

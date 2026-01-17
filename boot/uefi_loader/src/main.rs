@@ -19,7 +19,7 @@ fn main() -> Status {
     system::with_stdout(|s| s.clear().unwrap());
 
     let mut kernel_path = PathBuf::new();
-    kernel_path.push(cstr16!("boot/sos_kernel.elf"));
+    kernel_path.push(cstr16!("boot/kernel"));
 
     let bootable_file_systems = get_file_systems_with_file(&kernel_path).unwrap();
 

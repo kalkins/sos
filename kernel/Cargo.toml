@@ -1,0 +1,11 @@
+[package]
+name = "kernel"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+log = "0.4"
+
+[target.'cfg(target_arch = "x86_64")'.dependencies]
+x86_64 = "0.14"
+uart_16550 = "0.3"
