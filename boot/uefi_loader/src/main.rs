@@ -6,7 +6,7 @@ extern crate alloc;
 use core::time::Duration;
 
 use log::info;
-use uefi::{fs::FileSystem, prelude::*};
+use uefi::{fs::PathBuf, prelude::*};
 
 use crate::fileutils::*;
 
@@ -18,12 +18,23 @@ fn main() -> Status {
 
     system::with_stdout(|s| s.clear().unwrap());
 
-    info!("Hello World!");
+    let mut kernel_path = PathBuf::new();
+    kernel_path.push(cstr16!("boot/sos_kernel.elf"));
 
-    let fs = boot::get_image_file_system(boot::image_handle()).unwrap();
-    let mut fs = FileSystem::new(fs);
+    let bootable_file_systems = get_file_systems_with_file(&kernel_path).unwrap();
 
-    enumerate_files(&mut fs, cstr16!(""));
+    if bootable_file_systems.len() > 1 {
+        panic!("Found multiple bootable file systems. This is not supported yet.");
+    }
+
+    let mut root_file_system = bootable_file_systems
+        .into_iter()
+        .next()
+        .expect("Found no bootable file systems.");
+
+    let kernel_file = root_file_system.read(kernel_path).unwrap();
+
+    info!("Found kernel file with size {} bytes", kernel_file.len());
 
     boot::stall(Duration::from_secs(10));
 
