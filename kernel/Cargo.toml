@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+boot-info = { path = "../boot/info" }
 log = "0.4"
 
 [target.'cfg(target_arch = "x86_64")'.dependencies]

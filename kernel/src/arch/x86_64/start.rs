@@ -1,3 +1,5 @@
+use boot_info::BootInfo;
+
 use crate::kernel_main;
 
 unsafe extern "C" {
@@ -15,6 +17,6 @@ pub unsafe extern "C" fn _start() -> ! {
     );
 }
 
-extern "sysv64" fn rust_start() -> ! {
-    kernel_main();
+extern "sysv64" fn rust_start(boot_info: BootInfo) -> ! {
+    kernel_main(boot_info);
 }
