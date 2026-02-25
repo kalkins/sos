@@ -4,17 +4,23 @@
 use core::panic::PanicInfo;
 
 use boot_info::{memory::MemoryType, BootInfo};
+use log::{debug, info, LevelFilter};
+use logger::KernelLogger;
 
 #[cfg(target_arch = "x86_64")]
 #[path = "arch/x86_64/mod.rs"]
 pub mod arch;
 
+pub mod logger;
 pub mod serial;
 
 pub fn kernel_main(boot_info: BootInfo) -> ! {
     arch::init();
 
-    println!("Welcome to SOS!");
+    KernelLogger::init();
+    KernelLogger::set_max_level(LevelFilter::Trace);
+
+    info!("Welcome to SOS!");
 
     let mut free: usize = 0;
 
@@ -22,9 +28,9 @@ pub fn kernel_main(boot_info: BootInfo) -> ! {
         unsafe {
             let region = *boot_info.memory_map.regions.add(index);
 
-            println!("");
-            println!("Memory region {index} ({:?})", region.kind);
-            println!("0x{:x}-0x{:x}", region.start, region.start + region.len);
+            debug!("");
+            debug!("Memory region {index} ({:?})", region.kind);
+            debug!("0x{:x}-0x{:x}", region.start, region.start + region.len);
 
             if region.kind == MemoryType::Free {
                 free += region.len as usize;
@@ -32,7 +38,7 @@ pub fn kernel_main(boot_info: BootInfo) -> ! {
         }
     }
 
-    println!("Total free memory: {free} bytes");
+    info!("Total free memory: {free} bytes");
 
     loop {}
 }
